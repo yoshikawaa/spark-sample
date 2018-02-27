@@ -1,0 +1,27 @@
+Configutation:
+  name: Default
+  Properties:
+   Property:
+   - {name: app-name, value: spark-sample}
+   - {name: log-path, value: log}
+   - {name: log-pattern, value: '[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n'}
+  Appenders:
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${log-pattern}
+    File:
+      name: File_Appender
+      fileName: ${log-path}/${app-name}.log
+      PatternLayout:
+        pattern: ${log-pattern}
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+      - ref: Console_Appender
+      - ref: File_Appender
+    Logger:
+    - name: io.github.yoshikawaa.spark.sample
+      level: debug
