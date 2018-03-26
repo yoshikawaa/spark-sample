@@ -46,7 +46,7 @@ public class Application {
         get("/", HomeController.home, templateEngine);
         path("/todos", () -> {
             get("", TodoController.findAll, templateEngine);
-            post("/create", TodoController.create);
+            post("/create", TodoController.create, templateEngine);
             post("/finish", TodoController.finish);
             post("/remove", TodoController.remove);
         });
@@ -55,7 +55,7 @@ public class Application {
         path("/api", () -> {
             path("/todos", () -> {
                 get("", TodoRestController.findAll, transformer);
-                get("/:id", TodoRestController.findAll, transformer);
+                get("/:id", TodoRestController.findOne, transformer);
                 post("", TodoRestController.create, transformer);
                 put("/:id", TodoRestController.finish, transformer);
                 delete("/:id", TodoRestController.remove, transformer);

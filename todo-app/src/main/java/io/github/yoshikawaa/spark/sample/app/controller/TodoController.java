@@ -7,7 +7,7 @@ import java.util.Optional;
 import io.github.yoshikawaa.spark.sample.app.model.Todo;
 import io.github.yoshikawaa.spark.sample.app.repository.TodoRepository;
 import io.github.yoshikawaa.spark.sample.core.request.Flash;
-import io.github.yoshikawaa.spark.sample.core.request.RequestUtils;
+import io.github.yoshikawaa.spark.sample.core.request.RequestTransformer;
 import io.github.yoshikawaa.spark.sample.core.validation.ValidationUtils;
 import spark.ModelAndView;
 import spark.Request;
@@ -23,9 +23,9 @@ public class TodoController {
         return getAll(req, res, new HashMap<>());
     };
 
-    public static final Route create = (req, res) -> {
+    public static final TemplateViewRoute create = (req, res) -> {
 
-        Todo todo = RequestUtils.map(req, Todo.class);
+        Todo todo = RequestTransformer.map(req, Todo.class);
         Map<String, String> errors = ValidationUtils.validate(todo);
         if (!errors.isEmpty()) {
             res.status(401);
@@ -57,7 +57,7 @@ public class TodoController {
     private static ModelAndView getAll(Request req, Response res, Map<String, Object> model) {
         model.put("todos", repository.findAll());
         Optional.ofNullable(req.attribute("message")).ifPresent(message -> model.put("message", message));
-        return new ModelAndView(model, "todo");
+        return new ModelAndView(model, "todos");
     }
 
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/css/siimple.min.css">
+<title>Todos</title>
+</head>
+<body class="siimple-content--small">
+    <div class="siimple-h1">Todo List</div>
+    <span class="siimple-tip siimple-tip--teal" th:if="${message}" th:text="${message}"></span>
+    <form class="siimple-form" method="post" action="/todos/create">
+        <label class="siimple-label">New todo:</label>
+        <input class="siimple-input" name="title">
+        <span class="siimple-tag siimple-tag--red" th:if="${errors and #maps.containsKey(errors, 'title')}"
+            th:text="${errors['title']}"></span>
+        <button class="siimple-btn siimple-btn--blue">create</button>
+    </form>
+    <hr>
+    <div class="siimple-table siimple-table--border siimple-table--hover" th:if="${not #lists.isEmpty(todos)}">
+        <div class="siimple-table-header">
+            <div class="siimple-table-row">
+                <div class="siimple-table-cell">title</div>
+                <div class="siimple-table-cell">created</div>
+                <div class="siimple-table-cell">action</div>
+            </div>
+        </div>
+        <div class="siimple-table-body">
+            <div class="siimple-table-row" th:each="todo : ${todos}" th:object="${todo}">
+                <div class="siimple-table-cell" th:classappend="*{finished} ? siimple-small" th:text="*{title}"></div>
+                <div class="siimple-table-cell" th:classappend="*{finished} ? siimple-small"
+                    th:text="*{#temporals.formatISO(created)}"></div>
+                <div class="siimple-table-cell">
+                    <form method="post" th:switch="*{finished}">
+                        <button th:case="true" class="siimple-btn siimple-btn--disabled">finished</button>
+                        <button th:case="*" class="siimple-btn siimple-btn--teal" name="id" th:value="*{id}"
+                            formaction="/todos/finish">finish</button>
+                        <button class="siimple-btn siimple-btn--orange" name="id" th:value="*{id}"
+                            formaction="/todos/remove">remove</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
